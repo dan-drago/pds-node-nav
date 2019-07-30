@@ -1,6 +1,8 @@
 import { PDSNodeNavSceneManager } from './PDSNodeNav/PDSNodeNavSceneManager';
 import './global.scss';
 
+let demo: PDSNodeNavSceneManager;
+
 initThreeJs();
 if (process.env.NODE_ENV === 'development') displayFpsStats();
 
@@ -11,7 +13,7 @@ function initThreeJs() {
   const containerId = 'canvas-container';
   const canvasContainer = document.getElementById('canvas-container');
   if (!!canvasContainer) {
-    const demo = new PDSNodeNavSceneManager(canvasContainer);
+    demo = new PDSNodeNavSceneManager(canvasContainer);
   } else {
     throw new Error('No container with id ' + containerId + ' found!!!');
   }
@@ -33,4 +35,13 @@ function displayFpsStats() {
   };
   script.src = '//mrdoob.github.io/stats.js/build/stats.min.js';
   document.head.appendChild(script);
+}
+
+const resetDiv = document.getElementById('reset-view');
+if (!!resetDiv) {
+  resetDiv.onclick = resetMainView;
+}
+
+function resetMainView() {
+  if (!!demo) demo.resetView();
 }

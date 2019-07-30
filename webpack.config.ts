@@ -49,9 +49,9 @@ const webpackConfig: Configuration = {
       poll: 1000
     },
     inline: true,
-    contentBase: [path.resolve(__dirname, 'dist')],
+    contentBase: [path.resolve(__dirname), path.resolve(__dirname, 'dist')],
     publicPath: `http://localhost:${devPort}/`,
-    port: parseInt(devPort,10),
+    port: parseInt(devPort, 10),
     historyApiFallback: {
       disableDotRule: true
     }

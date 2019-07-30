@@ -25,36 +25,64 @@ export class PDSNode extends SceneEntityBase implements ISceneEntity {
 
   init = () => {
     // const material = new THREE.MeshPhongMaterial();
-    const material = new THREE.MeshBasicMaterial({ color: 0xffff00 });
+    // const material = new THREE.MeshBasicMaterial({ color: 0xffff00 });
 
-    const geometry = new THREE.CylinderGeometry(this._radius, this._radius, 0.001, 32);
+    const material = new THREE.MeshBasicMaterial({
+      map: new THREE.TextureLoader().load('/images/' + this.getImageFromName(this._name), () => {
+        this._isSceneEntityReady = true;
+        this._parentSceneManager.attemptStart();
+      })
+    });
+
+    const geometry = new THREE.CylinderGeometry(this._radius, this._radius, 0.001, 2 * 32);
     const cylinderMesh = new THREE.Mesh(geometry, material);
     cylinderMesh.position.set(0, 0, 0);
     cylinderMesh.rotateX(Math.PI / 2);
+    cylinderMesh.rotateY(Math.PI / 2);
     cylinderMesh.name = this._name;
+
+    const mesh = new THREE.Mesh(
+      new THREE.BoxGeometry(this._radius, this._radius, this._radius),
+      material
+    );
+
     this._sceneEntityGroup.add(cylinderMesh);
+    // this._sceneEntityGroup.add(mesh);
 
     // Finish
     this._isSceneEntityReady = true;
     this._parentSceneManager.attemptStart();
   };
 
+  getImageFromName = (name: string) => {
+    const nameImagePairs: any = {
+      NASA: 'pds.jpg',
+      SBN: 'sbn.png',
+      'Minor Planets Center': 'mpc.png',
+      CATCH: 'catch.png',
+      'Planetary Science Institute': 'psi.png',
+      'Legacy SBN': 'legacy.png',
+      IAWN: 'iawn.png'
+    };
+    if (!!nameImagePairs[name]) return nameImagePairs[name];
+    return 'scipio.jpg';
+  };
+
   update = (time: number) => {
-    const t = time * 0.05;
-    let orbitalRadius = 0;
-    const rf = this._PdsNodeNavSceneManager.getRadiusShrinkFactor();
-    if (this._radius === rf) orbitalRadius = 1 / rf;
-    if (this._radius === rf * rf) orbitalRadius = 1 / rf;
+    //
+    // Parameterize orbits as function of radius
+    const t = time * 0.025;
+    const orbitalRadius = this._radius * 6;
 
-    orbitalRadius = this._radius * 6;
-
-    const parentPosition = this._parentPDSNode
-      ? this._parentPDSNode.getPosition()
-      : new THREE.Vector3();
-
+    // Determine angular offset by position amongst sibling nodes
     const siblings: PDSNode[] = this._parentPDSNode ? this._parentPDSNode.getChildren() : [];
     const childPosition = !!siblings ? siblings.indexOf(this) : 0;
     const thetaOffset = !!childPosition ? childPosition / siblings.length : 0;
+
+    // Calc circular position about parent node
+    const parentPosition = this._parentPDSNode
+      ? this._parentPDSNode.getPosition()
+      : new THREE.Vector3();
     const x = orbitalRadius * Math.cos((Math.PI * t) / orbitalRadius + 2 * Math.PI * thetaOffset);
     const y = orbitalRadius * Math.sin((Math.PI * t) / orbitalRadius + 2 * Math.PI * thetaOffset);
     const newPosition = new THREE.Vector3(parentPosition.x + x, parentPosition.y + y, 0);

@@ -7,4 +7,17 @@ html,
 body {
   width: 100%;
   height: 100%;
+  position: relative;
+}
+
+.reset-square {
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  height: 100px;
+  width: 100px;
+  background-image: url(/images/menu-image.png);
+  background-size: contain;
+  background-repeat: no-repeat;
+  z-index: 1;
 }

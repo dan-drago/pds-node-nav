@@ -12,7 +12,7 @@ export class SceneManagerBase {
   protected _requestAnimationFrameId: undefined | number;
   protected _orbitControls: OrbitControls;
   protected _clock: THREE.Clock | undefined;
-  protected _initialViewingVector: THREE.Vector3 = new THREE.Vector3(10, 10, 10);
+  protected _initialViewingVector: THREE.Vector3 = new THREE.Vector3(0, 0, 1);
   protected _isSceneReady: boolean = false;
   protected _updateCamera: (time: number) => void = () => {};
 

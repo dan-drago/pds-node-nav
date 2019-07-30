@@ -1,4 +1,4 @@
-import { PdsNodeNavSceneManager } from './PdsNodeNav/PdsNodeNavSceneManager';
+import { PDSNodeNavSceneManager } from './PDSNodeNav/PDSNodeNavSceneManager';
 import './global.scss';
 
 initThreeJs();
@@ -11,7 +11,7 @@ function initThreeJs() {
   const containerId = 'canvas-container';
   const canvasContainer = document.getElementById('canvas-container');
   if (!!canvasContainer) {
-    const demo = new PdsNodeNavSceneManager(canvasContainer);
+    const demo = new PDSNodeNavSceneManager(canvasContainer);
   } else {
     throw new Error('No container with id ' + containerId + ' found!!!');
   }

@@ -16,7 +16,12 @@ if [[ $1 == '--dev' ]]; then
     DEBUG=true \
     DEV_PORT=3000 \
     NODE_ENV=development \
-    ./node_modules/.bin/webpack-dev-server --colors --config webpack.config.ts --mode development
+    ./node_modules/.bin/webpack-dev-server \
+    --colors \
+    --hot \
+    --inline \
+    --config webpack.config.ts \
+    --mode development
 
 else
 
@@ -31,7 +36,11 @@ else
 
   TS_NODE_PROJECT=tsconfig.webpack.json \
     NODE_ENV=production \
-    ./node_modules/.bin/webpack --colors --config webpack.config.ts --mode production --json >compilation-stats.json
+    ./node_modules/.bin/webpack \
+    --colors \
+    --config webpack.config.ts \
+    --mode production \
+    --json >compilation-stats.json
 
   ln -fs $PWD/images $PWD/dist/images
 

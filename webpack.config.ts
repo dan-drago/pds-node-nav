@@ -36,7 +36,7 @@ const webpackConfig: Configuration = {
   entry: path.resolve('src', 'index.ts'),
 
   output: {
-    filename: isProduction ? '[name].[contenthash].js' : '[name].[hash].js',
+    filename: isProduction ? '[name].[contenthash].js' : '[name].js',
     // chunkFilename: "[name].[hash].js",
     // chunkFilename: "[name].[chunkhash].js",
     path: path.resolve('dist'),
@@ -45,15 +45,19 @@ const webpackConfig: Configuration = {
 
   devServer: {
     hot: true,
-    contentBase: [path.resolve(__dirname), path.resolve(__dirname, 'dist')],
+    watchOptions: {
+      poll: 1000
+    },
+    inline: true,
+    contentBase: [path.resolve(__dirname, 'dist')],
     publicPath: `http://localhost:${devPort}/`,
-    port: 3000,
+    port: parseInt(devPort,10),
     historyApiFallback: {
       disableDotRule: true
     }
   },
 
-  devtool: isProduction ? false : 'source-map',
+  devtool: isProduction || true ? false : 'source-map',
 
   resolve: {
     extensions: ['.ts', '.js', '.json', '.css', '.svg'],

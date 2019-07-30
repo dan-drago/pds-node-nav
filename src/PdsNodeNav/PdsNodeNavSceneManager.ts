@@ -1,9 +1,9 @@
 import { SceneManagerBase, ISceneManager } from '../ThreeJsScaffold/scene.manager';
 import { MiscHelpers } from './PdsNodeNavEntities/Helpers';
 import { DirectionalLight } from './PdsNodeNavEntities/DirectionalLight';
-import { Square } from './PdsNodeNavEntities/Square';
+import { PDSNode } from './PdsNodeNavEntities/PDSNode';
 
-export class PdsNodeNavSceneManager extends SceneManagerBase implements ISceneManager {
+export class PDSNodeNavSceneManager extends SceneManagerBase implements ISceneManager {
   constructor(container: HTMLElement) {
     super(container);
 
@@ -16,7 +16,7 @@ export class PdsNodeNavSceneManager extends SceneManagerBase implements ISceneMa
       new DirectionalLight(this),
       new MiscHelpers(this),
       // new SimpleLight(this),
-      new Square(this, 1)
+      new PDSNode(this, null, 1)
     ];
 
     // Set this as entities parent

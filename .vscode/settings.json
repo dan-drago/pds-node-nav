@@ -29,4 +29,5 @@
     },
     "tslint.configFile": "tslint.json",
     "tslint.enable": true,
+    "workbench.colorCustomizations": {},
 }

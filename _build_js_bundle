@@ -42,6 +42,6 @@ else
     --mode production \
     --json >compilation-stats.json
 
-  ln -fs $PWD/images $PWD/dist/images
+  cp -r $PWD/images $PWD/dist/images
 
 fi

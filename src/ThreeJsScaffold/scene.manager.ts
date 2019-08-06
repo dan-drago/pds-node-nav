@@ -19,8 +19,8 @@ export class SceneManagerBase {
   constructor(protected _container: HTMLElement, private _fps: number = 60) {
     // Set up canvas to fit precisely within HTML-container element
     this._canvas = document.createElement('canvas');
-    this._canvas.width = this._container.offsetWidth;
-    this._canvas.height = _container.offsetHeight;
+    this._canvas.width = this._container.offsetWidth.valueOf();
+    this._canvas.height = _container.offsetHeight.valueOf();
     this._container.appendChild(this._canvas);
 
     // Build Renderer
@@ -31,6 +31,8 @@ export class SceneManagerBase {
       alpha: true
     });
     this._renderer.setPixelRatio(DPR);
+    this._canvas.width *= 1 / DPR;
+    this._canvas.height *= 1 / DPR;
     this._renderer.gammaInput = true;
     this._renderer.gammaOutput = true;
     this._renderer.sortObjects = false; // This prevents pesky rendering-disruption effect

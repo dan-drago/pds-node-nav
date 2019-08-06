@@ -50,8 +50,8 @@ export class PDSNode extends SceneEntityBase implements ISceneEntity {
     // this._sceneEntityGroup.add(mesh);
 
     // Finish
-    this._isSceneEntityReady = true;
-    this._parentSceneManager.attemptStart();
+    // this._isSceneEntityReady = true;
+    // this._parentSceneManager.attemptStart();
   };
 
   getImageFromName = (name: string) => {
@@ -72,12 +72,12 @@ export class PDSNode extends SceneEntityBase implements ISceneEntity {
     //
     // Parameterize orbits as function of radius
     const t = time * 0.025;
-    const orbitalRadius = this._radius * 6;
+    const orbitalRadius = this._radius * 5.3;
 
     // Determine angular offset by position amongst sibling nodes
     const siblings: PDSNode[] = this._parentPDSNode ? this._parentPDSNode.getChildren() : [];
     const childPosition = !!siblings ? siblings.indexOf(this) : 0;
-    const thetaOffset = !!childPosition ? childPosition / siblings.length : 0;
+    const thetaOffset = Math.PI / 2 + (!!childPosition ? childPosition / siblings.length : 0);
 
     // Calc circular position about parent node
     const parentPosition = this._parentPDSNode

@@ -4,7 +4,7 @@ import './global.scss';
 let demo: PDSNodeNavSceneManager;
 
 initThreeJs();
-if (process.env.NODE_ENV === 'development') displayFpsStats();
+// if (process.env.NODE_ENV === 'development') displayFpsStats();
 
 /**
  * Create threeJs canvas and inject into container
@@ -37,11 +37,24 @@ function displayFpsStats() {
   document.head.appendChild(script);
 }
 
-const resetDiv = document.getElementById('reset-view');
-if (!!resetDiv) {
-  resetDiv.onclick = resetMainView;
-}
+// Set up listeners
 
-function resetMainView() {
-  if (!!demo) demo.resetView();
-}
+// Reset div
+// const resetDiv = document.getElementById('reset-view');
+// if (!!resetDiv) {
+//   resetDiv.onclick = (e: MouseEvent) => {
+//     e.preventDefault();
+//     if (!!demo) demo.zoomToPDSNode('NASA');
+//   };
+// } else throw new Error('No reset div found!');
+
+// Home Page
+const homePageButton = document.getElementById('home-button');
+if (!!homePageButton) {
+  homePageButton.onclick = (e: MouseEvent) => {
+    e.preventDefault();
+    console.log('!!!');
+
+    if (!!demo) demo.zoomToPDSNode('NASA');
+  };
+} else throw new Error('No home-page div found!');

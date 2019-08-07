@@ -36,10 +36,12 @@ else
 
   TS_NODE_PROJECT=tsconfig.webpack.json \
     NODE_ENV=production \
+    BASE_HREF=$1 \
     ./node_modules/.bin/webpack \
     --colors \
     --config webpack.config.ts \
     --mode production \
+    --verbose \
     --json >compilation-stats.json
 
   cp -r $PWD/images $PWD/dist/images

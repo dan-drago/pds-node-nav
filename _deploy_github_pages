@@ -2,9 +2,8 @@
 
 clear
 
-if [[ ! -d dist ]]; then
-  ./_build_js_bundle
-fi
+rm -rf dist
+./_build_js_bundle pds-node-nav
 
 node -e '''
   const ghpages = require("gh-pages");

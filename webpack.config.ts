@@ -24,6 +24,8 @@ const devPort = process.env.DEV_PORT || '3000';
 
 delete process.env.TS_NODE_PROJECT;
 
+console.log('>>>>', baseHref);
+
 ///////////////////////////
 // Webpack for JS Bundle //
 ///////////////////////////
@@ -57,7 +59,7 @@ const webpackConfig: Configuration = {
     }
   },
 
-  devtool: isProduction || true ? false : 'source-map',
+  devtool: isProduction ? false : 'source-map',
 
   resolve: {
     extensions: ['.ts', '.js', '.json', '.css', '.svg'],
@@ -176,7 +178,7 @@ const webpackConfig: Configuration = {
     ),
 
     // Replace %___% patterns within index.html
-    // new InterpolateHtmlPlugin(HtmlWebpackPlugin, { PUBLIC_URL: baseHref }),
+    new InterpolateHtmlPlugin(HtmlWebpackPlugin, { PUBLIC_URL: baseHref }),
 
     new webpack.DefinePlugin({
       __BASE_HREF__: `"${baseHref}"`

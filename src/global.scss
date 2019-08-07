@@ -5,21 +5,34 @@
 $header-height: 0px;
 $max-canvas-square-size: calc(100vh - #{$header-height});
 
-$min-info-panel-height: 200px;
+$min-info-panel-height: 250px;
 
 // $max-canvas-square-size: calc(100%);
 // $max-canvas-square-size: 400px;
 
 * {
-  margin: 0px;
-  padding: 0px;
+  // margin: 0px;
+  // padding: 0px;
   box-sizing: border-box;
-  overflow-x: hidden;
-  overflow-y: hidden;
+  // overflow-x: hidden;
+  // overflow-y: hidden;
 }
 
 html,
 body {
+  margin: 0px;
+  padding: 0px;
+  width: 100%;
+  height: 100%;
+  font-family: 'Open Sans Condensed', sans-serif;
+  background-color: black;
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+
+main {
+  margin: 0px;
+  padding: 0px;
   width: 100%;
   height: 100%;
   font-family: 'Open Sans Condensed', sans-serif;
@@ -32,7 +45,9 @@ main {
   height: 100%;
   position: relative;
   overflow: scroll;
-  background-color: yellow;
+  background-color: black;
+  overflow-x: hidden;
+  overflow-y: hidden;
 
   header {
     position: fixed;
@@ -43,7 +58,7 @@ main {
     background-color: rgba(255, 0, 0, 0.3);
     margin: 0px;
     padding: 0px;
-    background-color: aqua;
+    // background-color: aqua;
     height: $header-height;
     z-index: 1;
     overflow: visible;
@@ -69,8 +84,11 @@ main {
     width: 100vw;
     height: 100vw;
     max-height: calc(100vh - #{$header-height} - #{$min-info-panel-height});
-    background-color: green;
     box-sizing: border-box;
+  }
+
+  #info-panel * {
+    // overflow: scroll;
   }
 
   #info-panel {
@@ -78,27 +96,103 @@ main {
     width: 100vw;
     height: calc(100vh - 100vw);
     min-height: $min-info-panel-height;
-    background-color: pink;
+    overflow: scroll;
+    clear: both;
+    position: relative;
+    background-color: DarkSlateGrey;
+
+    #info-panel-content {
+      // padding: 10px;
+      position: absolute;
+      top: 0px;
+      bottom: 0px;
+      left: 0px;
+      right: 0px;
+      transform: translateX(100vw);
+      transition: transform 1s ease-in-out;
+      background-color: DarkSlateGrey;
+      box-sizing: border-box;
+      color: white;
+      h1 {
+        text-align: center;
+      }
+
+      .text-image-wrapper {
+        display: flex;
+        flex-direction: column;
+        .text-wrapper {
+          flex: 1;
+          padding: 0px 10%;
+          margin-bottom: 20px;
+          p {
+            padding: 0px;
+            margin: 0px;
+            span {
+              white-space: normal;
+            }
+          }
+        }
+        .image-wrapper {
+          position: relative;
+          // background-color: orange;
+          flex: 1;
+          display: flex;
+          align-items: flex-start;
+          justify-content: center;
+          margin-bottom: 10px;
+        }
+        .image-screen {
+          position: absolute;
+          top: 0px;
+          bottom: 0px;
+          left: 10%;
+          right: 10%;
+          padding: 0px 10%;
+          background-color: rgba(0, 0, 0, 0.05);
+          .goto-site-message {
+            visibility: hidden;
+            text-align: center;
+            align-items: center;
+            justify-content: center;
+            display: flex;
+            position: absolute;
+            top: 0px;
+            bottom: 0px;
+            left: 0px;
+            right: 0px;
+            font-size: 50px;
+            // font-family: roboto;
+            cursor: pointer;
+          }
+        }
+        .image-screen:hover {
+          background-color: rgba(0, 0, 0, 0.75);
+          .goto-site-message {
+            visibility: visible;
+          }
+        }
+      }
+    }
   }
+}
 
-  // @media (orientation: landscape) {
-  //   #canvas-container {
-  //     width: 100vw;
-  //     height: calc(100vh - #{$header-height});
-  //     background-color: lightgreen;
-  //   }
-  // }
-
-  .reset-square {
-    position: absolute;
-    right: 0px;
-    top: 0px;
-    height: 100px;
-    width: 100px;
-    background-image: url(/images/menu-image.png);
-    background-size: contain;
-    background-repeat: no-repeat;
-    z-index: 1;
+@media screen and (min-width: 400px) {
+  main {
+    #info-panel {
+      #info-panel-content {
+        .text-image-wrapper {
+          flex-direction: row;
+          .text-wrapper {
+            padding: 0px 10px;
+          }
+          .image-wrapper {
+            img {
+              max-height: 150px;
+            }
+          }
+        }
+      }
+    }
   }
 }
 
@@ -112,14 +206,28 @@ main {
       width: auto;
       height: 100vh;
       max-height: 100vh;
-      background-color: lightgreen;
+      // background-color: lightgreen;
     }
 
     #info-panel {
       flex: 1;
       width: auto;
       height: 100vh;
-      background-color: pink;
+      // background-color: pink;
+      #info-panel-content {
+        // color: red;
+        .text-image-wrapper {
+          flex-direction: column;
+          .text-wrapper {
+            padding: 0px 10%;
+          }
+          .image-wrapper {
+            img {
+              max-height: none;
+            }
+          }
+        }
+      }
     }
   }
 }
@@ -128,12 +236,12 @@ main {
   main {
     #canvas-container {
       flex: 3;
-      background-color: turquoise;
+      // background-color: turquoise;
     }
 
     #info-panel {
       flex: 2;
-      background-color: violet;
+      // background-color: violet;
     }
   }
 }

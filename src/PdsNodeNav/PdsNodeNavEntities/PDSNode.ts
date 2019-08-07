@@ -2,10 +2,12 @@ import * as THREE from 'three';
 import { ISceneEntity, SceneEntityBase } from '../../ThreeJsScaffold/scene.entity';
 import { ISceneManager } from '../../ThreeJsScaffold/scene.manager';
 import { PDSNodeNavSceneManager } from '../PDSNodeNavSceneManager';
+import { PDSData, IPDSDATUM } from '../PDSInfo';
 
 export class PDSNode extends SceneEntityBase implements ISceneEntity {
   private _children: PDSNode[] = [];
   private _PdsNodeNavSceneManager: PDSNodeNavSceneManager;
+  private _data: IPDSDATUM;
 
   constructor(
     parentSceneManager: ISceneManager,
@@ -19,6 +21,9 @@ export class PDSNode extends SceneEntityBase implements ISceneEntity {
 
     this._sceneEntityGroup.name = _name;
 
+    if (!PDSData[_name]) throw new Error('Data not found for ' + _name);
+    this._data = PDSData[_name];
+
     // Add this node to parent's children
     if (!!_parentPDSNode) _parentPDSNode.addToChildren(this);
   }
@@ -28,7 +33,7 @@ export class PDSNode extends SceneEntityBase implements ISceneEntity {
     // const material = new THREE.MeshBasicMaterial({ color: 0xffff00 });
 
     const material = new THREE.MeshBasicMaterial({
-      map: new THREE.TextureLoader().load('/images/' + this.getImageFromName(this._name), () => {
+      map: new THREE.TextureLoader().load(PDSData[this._name].icon, () => {
         this._isSceneEntityReady = true;
         this._parentSceneManager.attemptStart();
       })
@@ -52,20 +57,6 @@ export class PDSNode extends SceneEntityBase implements ISceneEntity {
     // Finish
     // this._isSceneEntityReady = true;
     // this._parentSceneManager.attemptStart();
-  };
-
-  getImageFromName = (name: string) => {
-    const nameImagePairs: any = {
-      NASA: 'pds.jpg',
-      SBN: 'sbn.png',
-      'Minor Planets Center': 'mpc.png',
-      CATCH: 'catch.png',
-      'Planetary Science Institute': 'psi.png',
-      'Legacy SBN': 'legacy.png',
-      IAWN: 'iawn.png'
-    };
-    if (!!nameImagePairs[name]) return nameImagePairs[name];
-    return 'scipio.jpg';
   };
 
   update = (time: number) => {
@@ -103,4 +94,12 @@ export class PDSNode extends SceneEntityBase implements ISceneEntity {
   addToChildren = (child: PDSNode) => {
     this._children.push(child);
   };
+
+  getName = () => this._name;
+
+  getAboutText = () => PDSData[this._name].about;
+
+  getWebsiteUrl = () => PDSData[this._name].websiteUrl;
+
+  getWebsiteImage = () => PDSData[this._name].websiteImage;
 }

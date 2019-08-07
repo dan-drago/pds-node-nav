@@ -1,11 +1,10 @@
 import * as THREE from 'three';
 import { SceneManagerBase, ISceneManager } from '../ThreeJsScaffold/scene.manager';
 import { MiscHelpers } from './PdsNodeNavEntities/Helpers';
-import { DirectionalLight } from './PdsNodeNavEntities/DirectionalLight';
 import { PDSNode } from './PdsNodeNavEntities/PDSNode';
 import { distanceBetweenPoints } from 'src/ThreeJsScaffold/utils/threeGeometry';
 import { SimpleLight } from './PDSNodeNavEntities/SimpleLight';
-import { Clock } from 'three';
+import { PDSData } from './PDSInfo';
 
 export class PDSNodeNavSceneManager extends SceneManagerBase implements ISceneManager {
   private _raycaster = new THREE.Raycaster();
@@ -18,7 +17,15 @@ export class PDSNodeNavSceneManager extends SceneManagerBase implements ISceneMa
   private _viewHeightParam = 4.0;
   private _isWheelEnabled = !false;
 
-  constructor(container: HTMLElement) {
+  constructor(
+    container: HTMLElement,
+    private _cbUpdateInfoPanel: (
+      title: string,
+      text: string,
+      websiteUrl: string,
+      websiteImage: string
+    ) => void
+  ) {
     super(container);
 
     // Fix later: we want OCs off only when when zooming
@@ -32,8 +39,8 @@ export class PDSNodeNavSceneManager extends SceneManagerBase implements ISceneMa
 
     // Create nested nodes
     const rf = this._radiusShrinkFactor;
-    const lev000 = new PDSNode(this, null, 'NASA', 1);
-    const lev110 = new PDSNode(this, lev000, 'SBN', rf);
+    const lev000 = new PDSNode(this, null, 'NASA: The Planetary Data System', 1);
+    const lev110 = new PDSNode(this, lev000, 'Small Bodies Node', rf);
     const lev120 = new PDSNode(this, lev000, 'Engineering', rf);
     const lev130 = new PDSNode(this, lev000, 'Atmospheres', rf);
     const lev140 = new PDSNode(this, lev000, 'Geosciences', rf);
@@ -47,6 +54,7 @@ export class PDSNodeNavSceneManager extends SceneManagerBase implements ISceneMa
     const lev113 = new PDSNode(this, lev110, 'IAWN', rf * rf);
     const lev114 = new PDSNode(this, lev110, 'CATCH', rf * rf);
     const lev115 = new PDSNode(this, lev110, 'Legacy SBN', rf * rf);
+    const lev116 = new PDSNode(this, lev110, 'BSU', rf * rf);
 
     // Create entities
     this._sceneEntities = [
@@ -67,7 +75,8 @@ export class PDSNodeNavSceneManager extends SceneManagerBase implements ISceneMa
       lev112,
       lev113,
       lev114,
-      lev115
+      lev115,
+      lev116
     ];
 
     // Load all entities
@@ -79,33 +88,30 @@ export class PDSNodeNavSceneManager extends SceneManagerBase implements ISceneMa
     // Initial zoom to primary node
     this._zoomingObject = lev000;
     // this.resetView();
-    this.zoomToPDSNode('NASA');
+    this.zoomToPDSNode('NASA: The Planetary Data System');
 
     // Set up raycasting
     window.addEventListener('click', this.onMouseClick, false);
-    window.addEventListener('mouseenter', this.onMouseEnter, false);
-    window.addEventListener('mouseleave', this.onMouseLeave, false);
 
+    // Set up wheel/scroll listener logic
     this._container.onmouseenter = this.onMouseEnter;
     this._container.onmouseleave = this.onMouseLeave;
-
     window.addEventListener('mousewheel', this.onMouseWheel as any, false);
     window.addEventListener('scroll', this.onMouseWheel as any, false);
   }
 
   onMouseEnter = (e: MouseEvent) => {
-    console.log('@@@');
+    console.log('$$$');
     this._isWheelEnabled = true;
   };
 
   onMouseLeave = (e: MouseEvent) => {
-    console.log('@@@---');
+    console.log('$$$----');
     this._isWheelEnabled = false;
   };
 
   onMouseWheel = (e: WheelEvent) => {
     if (!this._isWheelEnabled) return;
-    // e.preventDefault();
     const dz = e.deltaY;
     const tryNewZ = this._camera.position.z + dz * 0.01;
     const minZ = this._zoomingObject.getRadius() * this._viewHeightParam;
@@ -142,6 +148,7 @@ export class PDSNodeNavSceneManager extends SceneManagerBase implements ISceneMa
     this._sceneEntities.forEach(sceneEntity => {
       const sceneEntityGroup = sceneEntity.getSceneEntityGroup();
       if (sceneEntityGroup.name === foundMeshName && sceneEntity instanceof PDSNode) {
+        // Initiate zoom
         this._zoomingObject = sceneEntity;
         this._zoomClock = new THREE.Clock();
         this._isZooming = true;
@@ -171,8 +178,15 @@ export class PDSNodeNavSceneManager extends SceneManagerBase implements ISceneMa
 
       // When close enough, stop fractional movement
       const dist = distanceBetweenPoints(this._camera.position, targetPosition);
-      if (dist < 0.005) {
+      if (dist < 0.005 && !!this._isZooming) {
         this._isZooming = false;
+        // Trigger info-panel update
+        this._cbUpdateInfoPanel(
+          this._zoomingObject.getName(),
+          this._zoomingObject.getAboutText(),
+          this._zoomingObject.getWebsiteUrl(),
+          this._zoomingObject.getWebsiteImage()
+        );
       }
     }
   };

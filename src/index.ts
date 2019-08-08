@@ -79,7 +79,9 @@ async function cbUpdateInfoPanel(
   // Set Website image
   const infoPanelImg = document.getElementById('info-panel-image') as HTMLImageElement;
   if (!!infoPanelImg) {
-    infoPanelImg.src = !!websiteImage ? websiteImage : '/images/pirates.jpg';
+    infoPanelImg.src = !!websiteImage
+      ? websiteImage
+      : 'https://thedisneyblog.com/wp-content/uploads/2010/11/jacksonsneverland.jpg';
   } else {
     throw new Error("No div with 'info-panel-image' id found");
   }

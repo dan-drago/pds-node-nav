@@ -8,7 +8,7 @@ rm -rf dist
 node -e '''
   const ghpages = require("gh-pages");
 
-  const GITHUB_USER_NAME = "dwd-umd";
+  const GITHUB_USER_NAME = "dan-drago";
   const GITHUB_REPO_NAME = "pds-node-nav";
 
   console.log("DEPLOYING...");
